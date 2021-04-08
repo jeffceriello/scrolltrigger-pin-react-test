@@ -1,22 +1,36 @@
 import React from "react";
-import { connect } from "frontity";
+import { connect, styled } from "frontity";
 
-const Link = ({ actions, link, className, children }) => {
-  const onClick = event => {
-    // Do nothing if it's an external link
+const Link = ({
+  actions,
+  link,
+  className,
+  children,
+  "aria-current": ariaCurrent,
+  colour
+}) => {
+  const onClick = (event) => {
     if (link.startsWith("http")) return;
-
     event.preventDefault();
-    // Set the router to the new url.
     actions.router.set(link);
     window.scrollTo(0, 0);
   };
 
   return (
-    <a href={link} onClick={onClick} className={className}>
+    <LinkItem
+      href={link}
+      onClick={onClick}
+      className={className}
+      aria-current={ariaCurrent}
+      colour={colour}
+    >
       {children}
-    </a>
+    </LinkItem>
   );
 };
 
 export default connect(Link);
+
+const LinkItem = styled.a`
+  color: ${(props) => props.colour};
+`;

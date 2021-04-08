@@ -1,49 +1,13 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useRef, useEffect } from "react";
 import { connect, styled } from "frontity";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import SwiperCore, {
-  Pagination,
-  Controller,
-  EffectFade,
-  Mousewheel
-} from "swiper";
-import { Swiper, SwiperSlide } from "swiper/react";
-
-SwiperCore.use([Pagination, Controller, EffectFade, Mousewheel]);
+gsap.registerPlugin(ScrollTrigger);
 
 const VerticalSlider = ({ content, libraries, data }) => {
-  const [firstSwiper, setFirstSwiper] = useState(null);
-  const [secondSwiper, setSecondSwiper] = useState(null);
   const pinnedRef = useRef(null);
 
   const { slides } = content;
-
-  const params1 = {
-    direction: "vertical",
-    // mousewheel: {
-    //     releaseOnEdges: true,
-    //     forceToAxis: true,
-    //     eventsTarget: ".vertical-slider-wrapper"
-    // },
-    speed: 1000,
-    pagination: {
-      clickable: true
-    },
-    slidesPerView: 1,
-    controller: {
-      control: secondSwiper
-    }
-  };
-  const params2 = {
-    preloadImages: false,
-    lazy: true,
-    noSwiping: true,
-    effect: "fade",
-    controller: {
-      control: firstSwiper
-    }
-  };
 
   useEffect(() => {
     const pinnedRefEl = pinnedRef.current;
@@ -73,37 +37,15 @@ const VerticalSlider = ({ content, libraries, data }) => {
   return (
     <VerticalSliderWrapper className="vertical-slider-wrapper" ref={pinnedRef}>
       <VerticalSliderCol>
-        <Swiper {...params2} onSwiper={setSecondSwiper}>
-          {slides &&
-            slides.map((slide, i) => {
-              const { image } = slide;
-              return (
-                <SwiperSlide key={i.toString()}>
-                  <ImageSlide bg={image} />
-                </SwiperSlide>
-              );
-            })}
-        </Swiper>
-      </VerticalSliderCol>
-      <VerticalSliderCol>
-        <Swiper {...params1} onSwiper={setFirstSwiper}>
-          {slides &&
-            slides.map((slide, i) => {
-              const { copy, heading, link_text, link_url } = slide;
-              const Html2React = libraries.html2react.Component;
-              const linkUrl = libraries.source.normalize(link_url);
-              return (
-                <SwiperSlide key={i.toString()}>
-                  <ContentSlide>
-                    <div>
-                      <p>{heading}</p>
-                      <Html2React html={copy} />
-                    </div>
-                  </ContentSlide>
-                </SwiperSlide>
-              );
-            })}
-        </Swiper>
+        {slides &&
+          slides.map((slide, i) => {
+            const { image } = slide;
+            return (
+              <div style={{ width: "100%", height: "100%" }} key={i.toString()}>
+                <ImageSlide bg={image} />
+              </div>
+            );
+          })}
       </VerticalSliderCol>
     </VerticalSliderWrapper>
   );
@@ -113,12 +55,15 @@ export default connect(VerticalSlider);
 
 const VerticalSliderWrapper = styled.div`
   display: flex;
+  width: 100%;
+  height: 100%;
 `;
 
 const VerticalSliderCol = styled.div`
   width: 50%;
   max-width: 50%;
   flex: 0 0 50%;
+  height: 100%;
 `;
 
 const ImageSlide = styled.div`
@@ -127,5 +72,3 @@ const ImageSlide = styled.div`
   height: 100%;
   background-image: url(${(props) => props.bg});
 `;
-
-const ContentSlide = styled.div``;
