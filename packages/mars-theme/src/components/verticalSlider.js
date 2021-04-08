@@ -60,9 +60,9 @@ const VerticalSliderWrapper = styled.div`
 `;
 
 const VerticalSliderCol = styled.div`
-  width: 50%;
-  max-width: 50%;
-  flex: 0 0 50%;
+  width: 100%;
+  max-width: 100%;
+  flex: 0 0 100%;
   height: 100%;
 `;
 
